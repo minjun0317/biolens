@@ -411,6 +411,11 @@ const LOG_COOLDOWN = 4000; // avoid logging the same class back-to-back (ms)
 const RING_LEN = 2 * Math.PI * 52;
 const COLORS = ["var(--c1)", "var(--c2)", "var(--c3)", "var(--c4)", "var(--c5)"];
 const $ = (id) => document.getElementById(id);
+
+// 모델을 다시 학습해 올리면 바로 반영되도록 모델 파일은 항상 서버에 재확인
+const nativeFetch = window.fetch.bind(window);
+window.fetch = (url, init = {}) =>
+  /teachablemachine|tm-model/.test(String(url)) ? nativeFetch(url, { ...init, cache: "no-cache" }) : nativeFetch(url, init);
 const colorOf = (cls) => COLORS[Math.max(0, labels.indexOf(cls)) % COLORS.length];
 
 const store = {
